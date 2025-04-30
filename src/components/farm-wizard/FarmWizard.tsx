@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useFarmWizard } from '@/contexts/FarmWizardContext';
+import { useWallet } from '@/components/context/WalletContext';
 import { STEPS } from '@/lib/farm-wizard-constants';
 import StepIndicator from './StepIndicator';
 import BasicInfoStep from './BasicInfoStep';
@@ -19,6 +20,11 @@ const FarmWizard: React.FC = () => {
     goToPreviousStep, 
     isCurrentStepValid 
   } = useFarmWizard();
+
+  const { account, networkId } = useWallet();
+
+  // Only allow farm creation if wallet is connected and on correct network
+  const canCreateFarm = account !== null && networkId === 31; // 31 is Rootstock Testnet
 
   // Render current step content
   const renderStepContent = () => {
@@ -42,6 +48,18 @@ const FarmWizard: React.FC = () => {
 
   return (
     <div className="w-full max-w-5xl mx-auto">
+      {account && (
+        <div className="mb-4">
+          Connected as: {account.slice(0, 6) + '...' + account.slice(-4)}
+        </div>
+      )}
+      
+      {!canCreateFarm && (
+        <div className="alert alert-warning mb-4">
+          Please connect to Rootstock Testnet to create a farm
+        </div>
+      )}
+      
       <StepIndicator />
       
       <Card className="p-6 mb-4">

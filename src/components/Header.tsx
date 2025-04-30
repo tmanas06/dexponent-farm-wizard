@@ -1,8 +1,8 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 import { ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useWallet } from '@/components/context/WalletContext';
 import { useToast } from '@/hooks/use-toast';
 
 interface HeaderProps {
@@ -10,23 +10,11 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ className }) => {
-  const [isConnecting, setIsConnecting] = useState(false);
+  const { account, connectWallet, disconnectWallet, isConnecting } = useWallet();
   const { toast } = useToast();
 
-  const handleConnectWallet = () => {
-    setIsConnecting(true);
-    // Simulate wallet connection
-    setTimeout(() => {
-      setIsConnecting(false);
-      toast({
-        title: "Wallet Connection",
-        description: "This is a demo. In a real application, this would connect to MetaMask or another wallet provider.",
-      });
-    }, 1000);
-  };
-
   const openDiscord = () => {
-    window.open('https://discord.gg/dexponent', '_blank');
+    window.open('https://discord.com/invite/yermEKz6rc', '_blank');
   };
 
   const openDocumentation = () => {
@@ -65,13 +53,22 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
             Join Discord <ExternalLink size={14} />
           </Button>
           
-          <Button 
-            className="bg-dex-purple text-white px-4 py-1.5 rounded-md text-sm hover:opacity-90 transition-opacity"
-            disabled={isConnecting}
-            onClick={handleConnectWallet}
-          >
-            {isConnecting ? 'Connecting...' : 'Connect Wallet'}
-          </Button>
+          {account ? (
+            <Button 
+              className="bg-dex-purple text-white px-4 py-1.5 rounded-md text-sm hover:opacity-90 transition-opacity"
+              onClick={disconnectWallet}
+            >
+              {account.slice(0, 6) + '...' + account.slice(-4)}
+            </Button>
+          ) : (
+            <Button 
+              className="bg-dex-purple text-white px-4 py-1.5 rounded-md text-sm hover:opacity-90 transition-opacity"
+              disabled={isConnecting}
+              onClick={connectWallet}
+            >
+              {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+            </Button>
+          )}
         </div>
       </div>
     </header>
