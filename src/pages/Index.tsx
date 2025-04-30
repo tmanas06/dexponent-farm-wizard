@@ -40,10 +40,10 @@ const Index = () => {
       
       <footer className="border-t border-gray-200 py-6">
         <div className="max-w-7xl mx-auto px-6 text-center text-sm text-gray-500">
-          <p>© 2025 Dexponent Protocol. All rights reserved.</p>
+          <p>2025 Dexponent Protocol</p>
           <p className="mt-2">
             <a 
-              href="https://github.com/dexponent/farm-wizard" 
+              href="https://github.com/tmanas06/dexponent-farm-wizard" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-dex-purple hover:underline flex items-center justify-center gap-1"
