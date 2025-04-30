@@ -1,12 +1,38 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 interface HeaderProps {
   className?: string;
 }
 
 const Header: React.FC<HeaderProps> = ({ className }) => {
+  const [isConnecting, setIsConnecting] = useState(false);
+  const { toast } = useToast();
+
+  const handleConnectWallet = () => {
+    setIsConnecting(true);
+    // Simulate wallet connection
+    setTimeout(() => {
+      setIsConnecting(false);
+      toast({
+        title: "Wallet Connection",
+        description: "This is a demo. In a real application, this would connect to MetaMask or another wallet provider.",
+      });
+    }, 1000);
+  };
+
+  const openDiscord = () => {
+    window.open('https://discord.gg/dexponent', '_blank');
+  };
+
+  const openDocumentation = () => {
+    window.open('https://docs.dexponent.io', '_blank');
+  };
+
   return (
     <header className={cn("w-full px-6 py-4 border-b border-gray-200", className)}>
       <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -21,15 +47,31 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
         </div>
         
         <div className="flex items-center space-x-4">
-          <button className="text-sm text-gray-600 hover:text-dex-purple transition-colors">
-            Documentation
-          </button>
-          <button className="text-sm text-gray-600 hover:text-dex-purple transition-colors">
-            Join Discord
-          </button>
-          <button className="bg-dex-purple text-white px-4 py-1.5 rounded-md text-sm hover:opacity-90 transition-opacity">
-            Connect Wallet
-          </button>
+          <Button 
+            variant="ghost" 
+            size="sm"
+            className="text-sm text-gray-600 hover:text-dex-purple transition-colors flex items-center gap-1"
+            onClick={openDocumentation}
+          >
+            Documentation <ExternalLink size={14} />
+          </Button>
+          
+          <Button 
+            variant="ghost" 
+            size="sm"
+            className="text-sm text-gray-600 hover:text-dex-purple transition-colors flex items-center gap-1"
+            onClick={openDiscord}
+          >
+            Join Discord <ExternalLink size={14} />
+          </Button>
+          
+          <Button 
+            className="bg-dex-purple text-white px-4 py-1.5 rounded-md text-sm hover:opacity-90 transition-opacity"
+            disabled={isConnecting}
+            onClick={handleConnectWallet}
+          >
+            {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+          </Button>
         </div>
       </div>
     </header>
